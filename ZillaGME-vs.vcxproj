@@ -150,10 +150,12 @@
     <ResourceCompile Include="ZillaGME.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.nsf">
+    <CopyFileToFolders Include="test.nsf">
       <FileType>Document</FileType>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-    </None>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
