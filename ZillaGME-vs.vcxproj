@@ -41,6 +41,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <Import Project="$(ZillaLibDir)/ZillaApp-vs.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WebAssembly-Debug|Win32'">
+    <IncludePath>$(ZillaLibDir)/Include;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WebAssembly-Release|Win32'">
+    <IncludePath>$(ZillaLibDir)/Include;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="Audio_Scope.cpp" />
     <ClCompile Include="gme\Ay_Apu.cpp" />

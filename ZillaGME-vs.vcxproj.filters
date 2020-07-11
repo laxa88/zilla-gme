@@ -316,6 +316,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.nsf" />
+    <CopyFileToFolders Include="test.nsf" />
   </ItemGroup>
 </Project>
