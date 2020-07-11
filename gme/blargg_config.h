@@ -8,13 +8,13 @@
 
 // Uncomment to support only the listed game music types. See gme_type_list.cpp
 // for a list of all types.
-//#define GME_TYPE_LIST gme_nsf_type, gme_gbs_type
+#define GME_TYPE_LIST gme_nsf_type, gme_gbs_type
 
 // Uncomment to enable platform-specific optimizations
 //#define BLARGG_NONPORTABLE 1
 
 // Uncomment to use faster, lower quality sound synthesis
-//#define BLIP_BUFFER_FAST 1
+#define BLIP_BUFFER_FAST 1
 
 // Uncomment if automatic byte-order determination doesn't work
 //#define BLARGG_BIG_ENDIAN 1
