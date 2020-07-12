@@ -318,4 +318,7 @@
   <ItemGroup>
     <CopyFileToFolders Include="test.nsf" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="sources.mk" />
+  </ItemGroup>
 </Project>

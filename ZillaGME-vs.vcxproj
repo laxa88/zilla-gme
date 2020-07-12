@@ -165,4 +165,7 @@
       </ExcludedFromBuild>
     </CopyFileToFolders>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="sources.mk" />
+  </ItemGroup>
 </Project>
