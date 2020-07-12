@@ -174,6 +174,6 @@ void handle_error(const char* error)
 			while (!SDL_PollEvent(&e)) {}
 		} while (e.type != SDL_QUIT && e.type != SDL_KEYDOWN && e.type != SDL_MOUSEBUTTONDOWN);*/
 
-		exit(EXIT_FAILURE);
+		//exit(EXIT_FAILURE);
 	}
 }
