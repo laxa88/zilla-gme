@@ -165,6 +165,11 @@ void Music_Player::mute_voices( int mask )
 
 void Music_Player::fill_buffer( void* data, sample_t* out, int count )
 {
+	/*for (int i = 0; i < (count << 1); i++) {
+		out[i] = RAND_RANGE(INT8_MIN, INT8_MAX) * 100;
+	}
+	return;*/
+
 	Music_Player* self = (Music_Player*) data;
 	if ( self->emu_ )
 	{
