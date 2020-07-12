@@ -42,7 +42,8 @@
   </ItemGroup>
   <Import Project="$(ZillaLibDir)/ZillaApp-vs.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WebAssembly-Debug|Win32'">
-    <IncludePath>$(ZillaLibDir)/Include;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
+    <IncludePath>$(ZillaLibDir)/Include;%(AdditionalIncludeDirectories);C:\Users\LWY\Desktop\programming\personal\ZillaGME\gme;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\LWY\Desktop\programming\personal\ZillaGME\gme;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WebAssembly-Release|Win32'">
     <IncludePath>$(ZillaLibDir)/Include;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
