@@ -29,7 +29,7 @@ static short scope_buf[scope_width * 2];
 
 static void init()
 {
-	ZL_Display::Init("Render To Texture", 854, 480);
+	ZL_Display::Init("Zilla GME", 854, 480);
 	ZL_Input::Init();
 
 	// Start SDL
