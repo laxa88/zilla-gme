@@ -71,7 +71,8 @@ blargg_err_t Music_Player::load_file( const char* path )
 {
 	stop();
 	
-	RETURN_ERR( gme_open_file( path, &emu_, sample_rate ) );
+	ZL_File file = ZL_File(path);
+	RETURN_ERR( gme_open_data( file.GetContents(), file.Size(), &emu_, sample_rate ) );
 	
 	char m3u_path [256 + 5];
 	strncpy( m3u_path, path, 256 );

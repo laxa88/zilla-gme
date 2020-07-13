@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <ProjectName>ZillaGME</ProjectName>
-    <DataAssets>Data</DataAssets>
+    <DataAssets>Data test.nsf</DataAssets>
     <ZillaLibDir>../ZillaLib</ZillaLibDir>
     <ProjectGuid>{52B5C804-B071-E22B-08B8-6AC179F8C5D3}</ProjectGuid>
   </PropertyGroup>
@@ -155,15 +155,6 @@
     <ClInclude Include="include.h" />
     <ClInclude Include="Music_Player.h" />
     <ResourceCompile Include="ZillaGME.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="test.nsf">
-      <FileType>Document</FileType>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <None Include="sources.mk" />

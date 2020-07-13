@@ -100,7 +100,7 @@ static struct sZillaGME : public ZL_Application
 		init();
 		
 		// Load file
-		path = (argc > 1 ? argv[argc - 1] : "test.nsf");
+		path = (argc > 1 ? argv[argc - 1] : "Data/test.nsf");
 		handle_error(player->load_file(path));
 		start_track(1, path);
 
