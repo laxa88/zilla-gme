@@ -18,10 +18,6 @@ static short scope_buf[scope_width * 2];
 
 static void init()
 {
-	ZL_Display::Init("Zilla GME", scope_width, 256);
-	ZL_Display::SetAA(false);
-	ZL_Input::Init();
-
 	// Init scope
 	scope = new Audio_Scope;
 	if (!scope)
@@ -79,12 +75,21 @@ static struct sZillaGME : public ZL_Application
 
 	sZillaGME() : ZL_Application(60) { }
 
+	~sZillaGME() {
+		delete player;
+		delete scope;
+	}
+
 	void Load(int argc, char *argv[])
 	{
+		ZL_Display::Init("Zilla GME", scope_width, 256);
+		ZL_Display::SetAA(false);
+		ZL_Input::Init();
+		ZL_Display::sigKeyDown.connect(this, &sZillaGME::OnKeyDown);
+
 		init();
 		
 		// Load file
-		//path = (argc > 1 ? argv[argc - 1] : "Data/test.nsf");
 		path = (argc > 1 ? argv[argc - 1] : "Data/zelda.nsf");
 		handle_error(player->load_file(path));
 		start_track(1, path);
@@ -104,11 +109,73 @@ static struct sZillaGME : public ZL_Application
 				player->pause(paused = true);
 		}
 	}
+
+	void OnKeyDown(ZL_KeyboardEvent& e)
+	{
+		switch (e.key)
+		{
+		case ZLK_ESCAPE:
+			ZL_Application::Quit();
+			break;
+
+		case ZLK_LEFT:
+			if (!paused && !--track)
+				track = 1;
+			start_track(track, path);
+			break;
+
+		case ZLK_RIGHT:
+			if (track < player->track_count())
+				start_track(++track, path);
+			break;
+
+		case ZLK_MINUS:
+			tempo -= 0.1;
+			if (tempo < 0.1)
+				tempo = 0.1;
+			player->set_tempo(tempo);
+			break;
+
+		case ZLK_EQUALS:
+			tempo += 0.1;
+			if (tempo > 2.0)
+				tempo = 2.0;
+			player->set_tempo(tempo);
+			break;
+
+		case ZLK_SPACE:
+			paused = !paused;
+			player->pause(paused);
+			break;
+
+		case ZLK_E:
+			stereo_depth += 0.2;
+			if (stereo_depth > 0.5)
+				stereo_depth = 0;
+			player->set_stereo_depth(stereo_depth);
+			break;
+
+		case ZLK_0:
+			tempo = 1.0;
+			muting_mask = 0;
+			player->set_tempo(tempo);
+			player->mute_voices(muting_mask);
+			break;
+
+		default:
+			if (ZLK_1 <= e.key && e.key <= ZLK_9) // toggle muting
+			{
+				muting_mask ^= 1 << (e.key - ZLK_1);
+				player->mute_voices(muting_mask);
+			}
+			break;
+		}
+	}
 } ZillaGME;
 
 
 void handle_error(const char* error)
 {
 	if (error)
-		ZL_LOG0("Error", "%s", error);
+		ZL_LOG1("Error", "%s", error);
 }
