@@ -94,7 +94,7 @@ static struct sZillaGME : public ZL_Application
 	int muting_mask = 0;
 	const char* path;
 
-	sZillaGME() : ZL_Application(30) { }
+	sZillaGME() : ZL_Application(60) { }
 
 	void Load(int argc, char *argv[])
 	{

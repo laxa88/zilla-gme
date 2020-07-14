@@ -21,14 +21,11 @@ public:
 	
 private:
 	typedef unsigned char byte;
-	ZL_Surface screen;
-	ZL_Surface surface;
 	byte* buf;
 	int buf_size;
 	int sample_shift;
 	int low_y;
 	int high_y;
-	int v_offset;
 	
 	void render( short const* in, long count, long step );
 };
