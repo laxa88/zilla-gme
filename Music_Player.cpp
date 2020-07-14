@@ -71,6 +71,7 @@ blargg_err_t Music_Player::load_file( const char* path )
 {
 	stop();
 	
+	// Note: gme_load_file did not work
 	ZL_File file = ZL_File(path);
 	RETURN_ERR( gme_open_data( file.GetContents(), file.Size(), &emu_, sample_rate ) );
 	
@@ -166,11 +167,6 @@ void Music_Player::mute_voices( int mask )
 
 void Music_Player::fill_buffer( void* data, sample_t* out, int count )
 {
-	/*for (int i = 0; i < (count << 1); i++) {
-		out[i] = RAND_RANGE(INT8_MIN, INT8_MAX) * 100;
-	}
-	return;*/
-
 	Music_Player* self = (Music_Player*) data;
 	if ( self->emu_ )
 	{
@@ -183,25 +179,12 @@ void Music_Player::fill_buffer( void* data, sample_t* out, int count )
 
 // Sound output driver using SDL
 
-//#include "SDL.h"
-
 static sound_callback_t sound_callback;
 static void* sound_callback_data;
-
-//static void sdl_callback( void* data, Uint8* out, int count )
-//{
-//	if ( sound_callback )
-//		sound_callback( sound_callback_data, (short*) out, count / 2 );
-//}
 
 bool mixer(short* buffer, unsigned int samples, bool need_mix)
 {
 	ZL_Audio::LockAudioThread();
-	
-	/*unsigned int len = (samples << 1);
-	for (unsigned int i = 0; i < len; i++) {
-		buffer[i] = RAND_RANGE(INT8_MIN, INT8_MAX) * 100;
-	}*/
 
 	if ( sound_callback )
 		sound_callback( sound_callback_data, buffer, samples );
@@ -219,40 +202,26 @@ static const char* sound_init( long sample_rate, int buf_size,
 
 	ZL_Audio::Init();
 	ZL_Audio::HookAudioMix(&mixer);
-	
-	//static SDL_AudioSpec as; // making static clears all fields to 0
-	//as.freq     = sample_rate;
-	//as.format   = AUDIO_S16SYS;
-	//as.channels = 2;
-	//as.callback = sdl_callback;
-	//as.samples  = buf_size;
-	//if ( SDL_OpenAudio( &as, 0 ) < 0 )
-	//{
-	//	const char* err = SDL_GetError();
-	//	if ( !err )
-	//		err = "Couldn't open SDL audio";
-	//	return err;
-	//}
-	
+
 	return 0;
 }
 
 static void sound_start()
 {
-	//SDL_PauseAudio( false );
+	ZL_Audio::SetGlobalSpeedFactor(1.f);
 }
 
 static void sound_stop()
 {
-	//SDL_PauseAudio( true );
-	
+	ZL_Audio::SetGlobalSpeedFactor(0.f);
+
 	// be sure audio thread is not active
-	/*SDL_LockAudio();
-	SDL_UnlockAudio();*/
+	ZL_Audio::LockAudioThread();
+	ZL_Audio::UnlockAudioThread();
 }
 
 static void sound_cleanup()
 {
 	sound_stop();
-	//SDL_CloseAudio();
+	ZL_Audio::UnhookAudioMix(&mixer);
 }
