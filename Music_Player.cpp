@@ -208,12 +208,12 @@ static const char* sound_init( long sample_rate, int buf_size,
 
 static void sound_start()
 {
-	ZL_Audio::SetGlobalSpeedFactor(1.f);
+	ZL_Audio::HookAudioMix(&mixer);
 }
 
 static void sound_stop()
 {
-	ZL_Audio::SetGlobalSpeedFactor(0.f);
+	ZL_Audio::UnhookAudioMix(&mixer);
 
 	// be sure audio thread is not active
 	ZL_Audio::LockAudioThread();
@@ -223,5 +223,4 @@ static void sound_stop()
 static void sound_cleanup()
 {
 	sound_stop();
-	ZL_Audio::UnhookAudioMix(&mixer);
 }
