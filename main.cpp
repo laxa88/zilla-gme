@@ -29,7 +29,8 @@ static short scope_buf[scope_width * 2];
 
 static void init()
 {
-	ZL_Display::Init("Zilla GME", 854, 480);
+	ZL_Display::Init("Zilla GME", scope_width, 256);
+	ZL_Display::SetAA(false);
 	ZL_Input::Init();
 
 	// Start SDL
@@ -93,14 +94,15 @@ static struct sZillaGME : public ZL_Application
 	int muting_mask = 0;
 	const char* path;
 
-	sZillaGME() : ZL_Application(60) { }
+	sZillaGME() : ZL_Application(30) { }
 
 	void Load(int argc, char *argv[])
 	{
 		init();
 		
 		// Load file
-		path = (argc > 1 ? argv[argc - 1] : "Data/test.nsf");
+		//path = (argc > 1 ? argv[argc - 1] : "Data/test.nsf");
+		path = (argc > 1 ? argv[argc - 1] : "Data/smb1.nsf");
 		handle_error(player->load_file(path));
 		start_track(1, path);
 

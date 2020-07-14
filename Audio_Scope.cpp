@@ -81,9 +81,9 @@ const char* Audio_Scope::draw( const short* in, long count, double step )
 	}
 	
 	/*if ( SDL_LockSurface( surface ) < 0 )
-		return "Couldn't lock surface";
+		return "Couldn't lock surface";*/
 	render( in, count, (long) (step * step_unit) );
-	SDL_UnlockSurface( surface );*/
+	//SDL_UnlockSurface( surface );
 	
 	if ( low > low_y )
 		low = low_y;
@@ -113,13 +113,92 @@ const char* Audio_Scope::draw( const short* in, long count, double step )
 
 void Audio_Scope::render( short const* in, long count, long step )
 {
+	byte* old_pos = buf;
+	//long surface_pitch = surface->pitch;
+	//byte* out = (byte*)surface->pixels + v_offset * surface_pitch;
+	int old_erase = *old_pos;
+	int old_draw = 0;
+	long in_pos = 0;
+
+	int low_y = this->low_y;
+	int high_y = this->high_y;
+	int half_step = (step + step_unit / 2) >> (step_bits + 1);
+
+	ZL_Display::ClearFill(ZL_Color::Black);
+	std::vector<ZL_Vector> p;
+	p.push_back({ -1.f, (scalar)(ZLHEIGHT / 2) });
+	p.push_back({ -1.f, 0.f });
+	p.push_back({ (scalar)count+1.f, -1.f });
+	p.push_back({ (scalar)count+1.f, (scalar)(ZLHEIGHT / 2)+1.f });
+	while (count--)
+	{
+		//ZL_Vector v1{ (scalar)count, ZL_Display::Height / 2.f };
+		//ZL_Vector v2{ (scalar)(count+1), ZL_Display::Height / 2.f };
+		//ZL_Display::DrawLine(v1, v2, ZL_Color::Green);
+
+		int surface_pitch = 1;
+
+		// Draw new line and put in old_buf
+		{
+			
+			int in_whole = in_pos >> step_bits;
+			int sample = (0x7FFF * 2 - in [in_whole] - in [in_whole + half_step]) >> sample_shift;
+			if ( !in_pos )
+				old_draw = sample;
+			in_pos += step;
+			
+			int delta = sample - old_draw;
+			int offset = old_draw * surface_pitch;
+			old_draw += delta;
+			
+			int next_line = surface_pitch;
+			if ( delta < 0 )
+			{
+				delta = -delta;
+				next_line = -surface_pitch;
+			}
+			
+			*old_pos++ = sample;
+			
+			// min/max updating can be interleved anywhere
+			
+			if ( low_y > sample )
+				low_y = sample;
+			
+			do
+			{
+				//out [offset] = draw_color;
+				offset += next_line;
+
+				//ZL_Display::DrawLine({ (scalar)count, (scalar)offset }, {(scalar)count, (scalar)(offset+1)}, ZL_Color::Green);
+				p.push_back({ (scalar)count, (scalar)(offset + 1) });
+			}
+			while ( delta-- > 1 );
+
+			// TODO: store all vectors and use ZL_Polygon to draw one continuous line instead?
+			//ZL_Display::DrawLine({ (scalar)count, (scalar)offset }, { (scalar)count, (scalar)(offset + delta + next_line) }, ZL_Color::Green);
+			
+			if ( high_y < sample )
+				high_y = sample;
+		}
+		
+		//out++;
+	}
+
+	//ZL_Display::DrawLine({ (scalar)count, (scalar)offset }, { (scalar)count, (scalar)(offset + delta + next_line) }, ZL_Color::Green);
+	ZL_Polygon(ZL_Polygon::BORDER).Add(p).Draw(ZL_Color::Green);
+
+
+
+
+
 	//byte* old_pos = buf;
 	//long surface_pitch = surface->pitch;
 	//byte* out = (byte*) surface->pixels + v_offset * surface_pitch;
 	//int old_erase = *old_pos;
 	//int old_draw = 0;
 	//long in_pos = 0;
-	//
+
 	//int low_y  = this->low_y;
 	//int high_y = this->high_y;
 	//int half_step = (step + step_unit / 2) >> (step_bits + 1);
