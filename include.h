@@ -6,7 +6,7 @@
 #include <ZL_Surface.h>
 //#include <ZL_Signal.h>
 #include <ZL_Audio.h>
-//#include <ZL_Font.h>
+#include <ZL_Font.h>
 //#include <ZL_Scene.h>
 //#include <ZL_Display3D.h>
 //#include <ZL_Timer.h>
