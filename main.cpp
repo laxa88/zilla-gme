@@ -9,6 +9,8 @@ int const scope_width = 512;
 #include <stdlib.h>
 #include <stdio.h>
 
+ZL_String sInfo;
+
 void handle_error(const char*);
 
 static bool paused;
@@ -40,7 +42,6 @@ static void start_track(int track, const char* path)
 	handle_error(player->start_track(track - 1));
 
 	// update track info
-
 	long seconds = player->track_info().length / 1000;
 	const char* game = player->track_info().game;
 	if (!*game)
@@ -55,11 +56,15 @@ static void start_track(int track, const char* path)
 			game++; // skip path separator
 	}
 
-	ZL_String::format("%s: %d/%d %s (%ld:%02ld)",
-		game, track, player->track_count(), player->track_info().song,
-		seconds / 60, seconds % 60);
-
-	// TODO display text in window
+	// update track info string
+	sInfo = ZL_String::format(
+		"%s - %s - %s - %d/%d",
+		game,
+		player->track_info().author,
+		player->track_info().copyright,
+		track,
+		player->track_count()
+	);
 }
 
 static struct sZillaGME : public ZL_Application
@@ -100,6 +105,9 @@ static struct sZillaGME : public ZL_Application
 	{
 		// Update scope
 		scope->draw(scope_buf, scope_width, 2);
+
+		// track info
+		fnt.Draw({ 0.f, 45.f }, sInfo, ZL_Origin::BottomLeft);
 
 		RenderButtons();
 

@@ -99,7 +99,7 @@ blargg_err_t Music_Player::start_track( int track )
 		// Sound must not be running when operating on emulator
 		sound_stop();
 		RETURN_ERR( emu_->start_track( track ) );
-		
+
 		// Calculate track length
 		if ( !emu_->track_info( &track_info_ ) )
 		{
@@ -107,8 +107,11 @@ blargg_err_t Music_Player::start_track( int track )
 				track_info_.length = track_info_.intro_length +
 						track_info_.loop_length * 2;
 		}
+
+		// If there is no length, it's probably endless, so set arbitrary length (2:30 mins)
 		if ( track_info_.length <= 0 )
 			track_info_.length = (long) (2.5 * 60 * 1000);
+
 		emu_->set_fade( track_info_.length );
 		
 		paused = false;
